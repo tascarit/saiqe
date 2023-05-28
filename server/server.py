@@ -24,6 +24,6 @@ while True:
         uname, email, passw, local_ip = msg.split("|")
         print(email)
 
-        answ = smtp.on_msg_send(email)
+        answ = smtp.on_img_create(email)
 
         conn.send(str(answ).encode())
