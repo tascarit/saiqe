@@ -67,10 +67,10 @@ def on_env_creation(self):
         except Exception:
             pass
 
-    self.login_entry = ct.CTkEntry(master=self, width=280, height=40, corner_radius=10, placeholder_text="Никнейм", fg_color="#3e3c42", bg_color="#323036", border_color="#575757")
+    self.login_entry = ct.CTkEntry(master=self, width=280, height=40, corner_radius=10, placeholder_text="Никнейм", fg_color="#3e3c42", bg_color="#323036", border_color="#575757", text_color="white")
     self.login_entry.place(relx=0.5, rely=0.45, anchor="center")
 
-    self.pass_entry = ct.CTkEntry(master=self, width=280, height=40, corner_radius=10, placeholder_text="Пароль", fg_color="#3e3c42", bg_color="#323036", border_color="#575757", show="*")
+    self.pass_entry = ct.CTkEntry(master=self, width=280, height=40, corner_radius=10, placeholder_text="Пароль", fg_color="#3e3c42", bg_color="#323036", border_color="#575757", show="*", text_color="white")
     self.pass_entry.place(relx=0.5, rely=0.5, anchor="center")
 
     self.login_button = ct.CTkButton(master=self, width=280, height=40, corner_radius=10, text="Войти", fg_color='#44404a', bg_color="#323036", command=on_auth, hover_color="#645578")

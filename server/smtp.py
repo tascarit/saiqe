@@ -1,14 +1,16 @@
 import smtplib
-import socket
 import random
-import PIL
 import os
 from PIL import Image, ImageDraw, ImageFont
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
 
-def on_img_create(email):
+ip = "192.168.0.102"
+port = 2417
+
+
+def on_msg_send(email):
 
     verification_code = random.randint(100000, 999999)
     random_nums = str(random.randint(100000000000000000000, 999999999999999999999999999999999999))
@@ -20,11 +22,8 @@ def on_img_create(email):
 
     email_verify_img.save("/home/tscrt/Desktop/saiqe/email_{}.png".format(random_nums))
 
-    on_msg_send(verification_code, "/home/tscrt/Desktop/saiqe/email_{}.png".format(random_nums), email)
-
-def on_msg_send(verification_code, img_path, email):
-
     domain = 'saiqe@internet.ru'
+    img_path = "/home/tscrt/Desktop/saiqe/email_{}.png".format(random_nums)
 
     msg = MIMEMultipart()
     msg["Subject"] = "Подтверждение почты | Saiqe"
@@ -46,7 +45,9 @@ def on_msg_send(verification_code, img_path, email):
         smtp.login("saiqe@internet.ru", "qPyC9340bcaWym041PQr")
         smtp.sendmail(domain, email, msg.as_string())
 
-        return "success" + "|" + str(verification_code)
+        res = "success" + "|" + str(verification_code)
+
+        return res
     
     except Exception as e:
         return "error"
@@ -54,5 +55,3 @@ def on_msg_send(verification_code, img_path, email):
     finally:
         os.remove(img_path)
         smtp.quit()
-
-on_img_create()
