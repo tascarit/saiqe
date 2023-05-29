@@ -151,205 +151,218 @@ def on_env_creation(self):
 
             else:
 
-                if check_index == 3:
+                def on_ip_verify():
 
-                    self.login_entry.configure(state="disabled", border_color='gray', text_color='gray')
-                    self.pass_entry.configure(state="disabled", border_color='gray', text_color='gray')
+                    if check_index == 3:
 
-                    try:
-                        self.uname_failure.destroy()
-                    except Exception:
-                        pass
-                    try:
-                        self.pass_failure.destroy()
-                    except Exception:
-                        pass
+                        self.login_entry.configure(state="disabled", border_color='gray', text_color='gray')
+                        self.pass_entry.configure(state="disabled", border_color='gray', text_color='gray')
 
-                    self.ip_failure = ct.CTkLabel(master=self, width=140, height=20, corner_radius=10, text_color="#8854a8", text="Подтвердите вход с нового IP адреса", bg_color="#323036")
-                    self.ip_failure.place(relx=0.5, rely=0.4, anchor="center")
-
-                    ip = "192.168.0.103"
-                    port = 2417
-
-                    lstnr = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                    lstnr.connect((ip, port))
-                    lstnr.send(str(self.login_entry.get()).encode())
-
-                    result = lstnr.recv(1024).decode()
-
-                    new_vc = ''
-
-                    if "|" in result:
-                        answ, vc = result.split("|")
-                    else:
-                        answ = "error"
-
-                    lstnr.close()
-
-                    def on_click_failure_or_success(event):
                         try:
-                            self.mail_failure.destroy()
+                            self.uname_failure.destroy()
+                        except Exception:
+                            pass
+                        try:
+                            self.pass_failure.destroy()
                         except Exception:
                             pass
 
-                        on_destroy_temp_msg()
+                        self.ip_failure = ct.CTkLabel(master=self, width=140, height=20, corner_radius=10, text_color="#8854a8", text="Подтвердите вход с нового IP адреса", bg_color="#323036")
+                        self.ip_failure.place(relx=0.5, rely=0.4, anchor="center")
 
-                    if answ == "error":
+                        ip = "192.168.0.112"
+                        port = 2417
 
-                        try:
-                            self.waiting_label.destroy()
-                        except Exception:
-                            pass
+                        lstnr = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                        lstnr.connect((ip, port))
+                        lstnr.send(str(self.login_entry.get()).encode())
 
-                        self.mail_failure = ct.CTkLabel(master=self, width=140, height=20, corner_radius=10, bg_color="#323036", text_color="#8854a8", text="Ошибка отправки письма, пожалуйста, сообщите - saiqe@internet.ru")
-                        self.mail_failure.place(relx=0.5, rely=0.35, anchor="center")
+                        result = lstnr.recv(1024).decode()
 
-                        self.mail_failure.bind("<Button-1>", on_click_failure_or_success)
-                    
-                    elif answ == "success":
+                        if "|" in result:
+                            answ, vc = result.split("|")
+                            print(vc)
+                        else:
+                            answ = "error"
 
-                        def on_refresh_button():
+                        lstnr.close()
+
+                        def on_click_failure_or_success(event):
+                            try:
+                                self.mail_failure.destroy()
+                            except Exception:
+                                pass
+
+                            on_destroy_temp_msg()
+
+                        if answ == "error":
 
                             try:
                                 self.waiting_label.destroy()
                             except Exception:
                                 pass
-                            try:
-                                self.mail_failure.destroy()
-                            except Exception:
-                                pass
-                            try:
-                                self.mail_success.destroy()
-                            except Exception:
-                                pass
-                            try:
-                                self.ip_failure.destroy()
-                            except Exception:
-                                pass
 
-                            lstnr = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                            lstnr.connect((ip, port))
-                            lstnr.send(str(self.login_entry.get()).encode())
+                            self.mail_failure = ct.CTkLabel(master=self, width=140, height=20, corner_radius=10, bg_color="#323036", text_color="#8854a8", text="Ошибка отправки письма, пожалуйста, сообщите - saiqe@internet.ru")
+                            self.mail_failure.place(relx=0.5, rely=0.35, anchor="center")
 
-                            result = lstnr.recv(1024).decode()
+                            self.mail_failure.bind("<Button-1>", on_click_failure_or_success)
+                        
+                        elif answ == "success":
 
-                            lstnr.close()
-
-                            if "|" in result:
-                                answ, new_vc = result.split("|")
-                            else:
-                                answ = "error"
-
-                            lstnr.close()
-
-                            if answ == "error":
-
-                                self.mail_failure = ct.CTkLabel(master=self, width=140, height=20, corner_radius=10, bg_color="#323036", text_color="#8854a8", text="Ошибка отправки письма, пожалуйста, сообщите - saiqe@internet.ru")
-                                self.mail_failure.place(relx=0.5, rely=0.4, anchor="center")
-
-                            elif answ == "success":
-
-                                self.mail_success = ct.CTkLabel(master=self, width=140, height=20, corner_radius=10, bg_color="#323036", text_color="#8854a8", text="Письмо отправлено повторно")
-                                self.mail_success.place(relx=0.5, rely=0.4, anchor="center")
+                            def on_refresh_button():
                                 
-
-                        def on_cancel_button():
-
-                            try:
-                                self.waiting_label.destroy()
-                            except Exception:
-                                pass
-                            try:
-                                self.mail_failure.destroy()
-                            except Exception:
-                                pass
-                            try:
-                                self.mail_success.destroy()
-                            except Exception:
-                                pass
-                            try:
-                                self.register_button.destroy()
-                            except Exception:
-                                pass
-                            try:
-                                self.vc_entry.destroy()
-                            except Exception:
-                                pass
-                            try:
-                                self.ip_failure.destroy()
-                            except Exception:
-                                pass
-                            try:
-                                self.failure_label.destroy()
-                            except Exception:
-                                pass
-
-                            self.cancel_button.destroy()
-                            self.refresh_button.destroy()
-
-                            on_destroy_login()
-
-                        self.login_entry.configure(state="disabled", text_color="gray", border_color="gray")
-                        self.pass_entry.configure(state="disabled", text_color="gray", border_color="gray")
-                        try:
-                            self.login_button.destroy()
-                        except Exception:
-                            pass
-                        self.unbind("<Return>")
-
-                        try:
-                            self.login_button.destroy()
-                        except Exception:
-                            pass
-
-                        cancel_image = ImageTk.PhotoImage(Image.open("/home/tscrt/Desktop/saiqe/images/cancel.png").resize((20, 20), Image.ANTIALIAS))
-                        refresh_image = ImageTk.PhotoImage(Image.open("/home/tscrt/Desktop/saiqe/images/refresh.png").resize((20, 20), Image.ANTIALIAS))
-
-                        self.cancel_button = ct.CTkButton(master=self, image=cancel_image, width=40, height=40, corner_radius=10, bg_color="#323036", hover_color="#323036", fg_color="#44404a", text = "", command=on_cancel_button)
-                        self.cancel_button.place(relx=0.575, rely=0.55, anchor="center")
-
-                        self.refresh_button = ct.CTkButton(master=self, image=refresh_image, width=40, height=40, corner_radius=10, bg_color="#323036", hover_color="#323036", fg_color="#44404a", text = "", command=on_refresh_button)
-                        self.refresh_button.place(relx=0.4255, rely=0.55, anchor="center")
-
-                        def v1(event):
-
-                            try:
-                                self.failure_label.destroy()
-                            except Exception:
-                                pass
-                            try:
-                                self.waiting_label.destroy()
-                            except Exception:
-                                pass
-
-                            if len(self.vc_entry.get()) < 6:
-                                pass
-                            elif len(self.vc_entry.get()) == 6:
-                                if str(self.vc_entry.get()).isnumeric():
-                                    self.vc_entry.configure(state="disabled", text_color="gray", border_color="gray")
-
-                                    if self.vc_entry.get() == vc or self.vc_entry.get() == new_vc:
-
-                                        self.success_label = ct.CTkLabel(master=self, width=140, height=20, corner_radius=10, bg_color="#323036", text_color="#8854a8", text=f"Ваш IP адрес успешно подтвержден, теперь вы можете войти")
-                                        self.success_label.place(relx=0.5, rely=0.4, anchor="center")
-
-                                        db_users.db_func.on_update(name=str(self.login_entry.get()), ip=local_ip)
-
-                                        try:
-                                            self.vc_entry.destroy()
-                                        except Exception:
-                                            pass
-                                        try:
-                                            self.cancel_button.destroy()
-                                        except Exception:
-                                            pass
-                                        try:
-                                            self.refresh_button.destroy()
-                                        except Exception:
-                                            pass
-                                        
-                                        on_destroy_login()
+                                try:
+                                    self.mail_failure.destroy()
+                                except Exception:
+                                    pass
+                                try:
+                                    self.ip_failure.destroy()
+                                except Exception:
+                                    pass
+                                try:
+                                    self.cancel_button.destroy()
+                                except Exception:
+                                    pass
+                                try:
+                                    self.refresh_button.destroy()
+                                except Exception:
+                                    pass
+                                try:
+                                    self.success_label.destroy()
+                                except Exception:
+                                    pass
+                                try:
+                                    self.failure_label.destroy()
+                                except Exception:
+                                    pass
+                                try:
+                                    self.vc_entry.destroy()
+                                except Exception:
+                                    pass
+                                on_ip_verify()
                                     
+
+                            def on_cancel_button():
+
+                                try:
+                                    self.waiting_label.destroy()
+                                except Exception:
+                                    pass
+                                try:
+                                    self.mail_failure.destroy()
+                                except Exception:
+                                    pass
+                                try:
+                                    self.mail_success.destroy()
+                                except Exception:
+                                    pass
+                                try:
+                                    self.register_button.destroy()
+                                except Exception:
+                                    pass
+                                try:
+                                    self.vc_entry.destroy()
+                                except Exception:
+                                    pass
+                                try:
+                                    self.ip_failure.destroy()
+                                except Exception:
+                                    pass
+                                try:
+                                    self.failure_label.destroy()
+                                except Exception:
+                                    pass
+
+                                self.cancel_button.destroy()
+                                self.refresh_button.destroy()
+
+                                on_destroy_login()
+
+                            self.login_entry.configure(state="disabled", text_color="gray", border_color="gray")
+                            self.pass_entry.configure(state="disabled", text_color="gray", border_color="gray")
+                            try:
+                                self.login_button.destroy()
+                            except Exception:
+                                pass
+                            self.unbind("<Return>")
+
+                            try:
+                                self.login_button.destroy()
+                            except Exception:
+                                pass
+
+                            cancel_image = ImageTk.PhotoImage(Image.open("/home/tscrt/Desktop/saiqe/images/cancel.png").resize((20, 20), Image.ANTIALIAS))
+                            refresh_image = ImageTk.PhotoImage(Image.open("/home/tscrt/Desktop/saiqe/images/refresh.png").resize((20, 20), Image.ANTIALIAS))
+
+                            self.cancel_button = ct.CTkButton(master=self, image=cancel_image, width=40, height=40, corner_radius=10, bg_color="#323036", hover_color="#323036", fg_color="#44404a", text = "", command=on_cancel_button)
+                            self.cancel_button.place(relx=0.575, rely=0.55, anchor="center")
+
+                            self.refresh_button = ct.CTkButton(master=self, image=refresh_image, width=40, height=40, corner_radius=10, bg_color="#323036", hover_color="#323036", fg_color="#44404a", text = "", command=on_refresh_button)
+                            self.refresh_button.place(relx=0.4255, rely=0.55, anchor="center")
+                            self.unbind("<Return>")
+
+                            def v1(event):
+
+                                try:
+                                    self.failure_label.destroy()
+                                except Exception:
+                                    pass
+                                try:
+                                    self.waiting_label.destroy()
+                                except Exception:
+                                    pass
+                                try:
+                                    self.ip_failure.destroy()
+                                except Exception:
+                                    pass
+
+                                if len(self.vc_entry.get()) < 6:
+                                    pass
+
+                                elif len(self.vc_entry.get()) == 6:
+
+                                    if str(self.vc_entry.get()).isnumeric():
+
+                                        self.vc_entry.configure(state="disabled", text_color="gray", border_color="gray")
+
+                                        if self.vc_entry.get() == vc:
+
+                                            self.success_label = ct.CTkLabel(master=self, width=140, height=20, corner_radius=10, bg_color="#323036", text_color="#8854a8", text=f"Ваш IP адрес успешно подтвержден, теперь вы можете войти")
+                                            self.success_label.place(relx=0.5, rely=0.4, anchor="center")
+
+                                            db_users.db_func.on_update(name=str(self.login_entry.get()), ip=local_ip)
+
+                                            try:
+                                                self.vc_entry.destroy()
+                                            except Exception:
+                                                pass
+                                            try:
+                                                self.cancel_button.destroy()
+                                            except Exception:
+                                                pass
+                                            try:
+                                                self.refresh_button.destroy()
+                                            except Exception:
+                                                pass
+                                            
+                                            on_destroy_login()
+                                        
+                                        else:
+
+                                            try:
+                                                self.mail_failure.destroy()
+                                            except Exception:
+                                                pass
+                                            try:
+                                                self.mail_success.destroy()
+                                            except Exception:
+                                                pass
+
+                                            self.failure_label = ct.CTkLabel(master=self, width=140, height=20, corner_radius=10, bg_color="#323036", text_color="#8854a8", text=f"Код введен неправильно")
+                                            self.vc_entry.delete(0, ct.END)
+                                            self.failure_label.place(relx=0.5, rely=0.4, anchor="center")
+                                            self.vc_entry.configure(state="normal", text_color="white", border_color="#575757")
+
                                     else:
 
                                         try:
@@ -361,33 +374,19 @@ def on_env_creation(self):
                                         except Exception:
                                             pass
 
-                                        self.failure_label = ct.CTkLabel(master=self, width=140, height=20, corner_radius=10, bg_color="#323036", text_color="#8854a8", text=f"Код введен неправильно")
-                                        self.vc_entry.delete(0, ct.END)
+                                        self.failure_label = ct.CTkLabel(master=self, width=140, height=20, corner_radius=10, bg_color="#323036", text_color="#8854a8", text=f"В поле для ввода кода могут быть только числа")
                                         self.failure_label.place(relx=0.5, rely=0.4, anchor="center")
+                                        self.vc_entry.delete(0, ct.END)
                                         self.vc_entry.configure(state="normal", text_color="white", border_color="#575757")
 
-                                else:
-
-                                    try:
-                                        self.mail_failure.destroy()
-                                    except Exception:
-                                        pass
-                                    try:
-                                        self.mail_success.destroy()
-                                    except Exception:
-                                        pass
-
-                                    self.failure_label = ct.CTkLabel(master=self, width=140, height=20, corner_radius=10, bg_color="#323036", text_color="#8854a8", text=f"В поле для ввода кода могут быть только числа")
-                                    self.failure_label.place(relx=0.5, rely=0.4, anchor="center")
-                                    self.vc_entry.delete(0, ct.END)
-                                    self.vc_entry.configure(state="normal", text_color="white", border_color="#575757")
-
-                        self.vc_entry = ct.CTkEntry(master=self, width=190, height=40, corner_radius=10, placeholder_text="Код подтверждения", bg_color="#323036", fg_color="#3e3c42", border_color="#575757", text_color="white")
-                        self.vc_entry.place(relx=0.5, rely=0.55, anchor="center")
-                        self.vc_entry.bind("<Return>", v1)
+                            self.vc_entry = ct.CTkEntry(master=self, width=190, height=40, corner_radius=10, placeholder_text="Код подтверждения", bg_color="#323036", fg_color="#3e3c42", border_color="#575757", text_color="white")
+                            self.vc_entry.place(relx=0.5, rely=0.55, anchor="center")
+                            self.vc_entry.bind("<Return>", v1)
 
                     elif check_index == 4:
                         print("ok")
+
+                on_ip_verify()
 
 
     def on_destroy():
@@ -397,6 +396,42 @@ def on_env_creation(self):
             pass
         try:
             self.pe_text.destroy()
+        except Exception:
+            pass
+        try:
+            self.refresh_button.destroy()
+        except Exception:
+            pass
+        try:
+            self.cancel_button.destroy()
+        except Exception:
+            pass
+        try:
+            self.mail_failure.destroy()
+        except Exception:
+            pass
+        try:
+            self.mail_success.destroy()
+        except Exception:
+            pass
+        try:
+            self.failure_label.destroy()
+        except Exception:
+            pass
+        try:
+            self.vc_entry.destroy()
+        except Exception:
+            pass
+        try:
+            self.ip_failure.destroy()
+        except Exception:
+            pass
+        try:
+            self.waiting_label.destroy()
+        except Exception:
+            pass
+        try:
+            self.success_label.destroy()
         except Exception:
             pass
 

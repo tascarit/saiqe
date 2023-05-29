@@ -4,7 +4,7 @@ import sys
 sys.path.insert(0, "/home/tscrt/Desktop/saiqe/db_users/")
 import db_func
 
-ip = "192.168.0.103"
+ip = "192.168.0.112"
 port = 2417
 
 listener = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
