@@ -177,7 +177,7 @@ def on_env_creation(self):
 
                     result = lstnr.recv(1024).decode()
 
-                    vc = ''
+                    new_vc = ''
 
                     if "|" in result:
                         answ, vc = result.split("|")
@@ -236,7 +236,7 @@ def on_env_creation(self):
                             lstnr.close()
 
                             if "|" in result:
-                                answ, vc = result.split("|")
+                                answ, new_vc = result.split("|")
                             else:
                                 answ = "error"
 
@@ -328,7 +328,7 @@ def on_env_creation(self):
                                 if str(self.vc_entry.get()).isnumeric():
                                     self.vc_entry.configure(state="disabled", text_color="gray", border_color="gray")
 
-                                    if self.vc_entry.get() == vc:
+                                    if self.vc_entry.get() == vc or self.vc_entry.get() == new_vc:
 
                                         self.success_label = ct.CTkLabel(master=self, width=140, height=20, corner_radius=10, bg_color="#323036", text_color="#8854a8", text=f"Ваш IP адрес успешно подтвержден, теперь вы можете войти")
                                         self.success_label.place(relx=0.5, rely=0.4, anchor="center")
