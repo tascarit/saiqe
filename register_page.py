@@ -325,9 +325,8 @@ def on_reg(self):
 
                     ip = "192.168.0.112"
                     port = 2417
-                    vc1 = ''
 
-                    local_ip = socket.gethostbyname(socket.gethostname())
+                    local_ip = socket.gethostbyname_ex(socket.gethostname())[2]
 
                     lstnr = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                     lstnr.connect((ip, port))
@@ -468,97 +467,55 @@ def on_reg(self):
 
                             if len(self.vc_entry.get()) < 6:
                                 pass
+
                             elif len(self.vc_entry.get()) == 6:
+
                                 if str(self.vc_entry.get()).isnumeric():
+
                                     self.vc_entry.configure(state="disabled", text_color="gray", border_color="gray")
 
-                                    if vc1 == "":
+                                    if self.vc_entry.get() == vc:
 
-                                        if self.vc_entry.get() == vc:
+                                        self.success_label = ct.CTkLabel(master=self, width=140, height=20, corner_radius=10, bg_color="#323036", text_color="#8854a8", text=f"Ваша почта успешно подтверждена, теперь вы можете войти")
+                                        self.success_label.place(relx=0.5, rely=0.35, anchor="center")
 
-                                            self.success_label = ct.CTkLabel(master=self, width=140, height=20, corner_radius=10, bg_color="#323036", text_color="#8854a8", text=f"Ваша почта успешно подтверждена, теперь вы можете войти")
-                                            self.success_label.place(relx=0.5, rely=0.35, anchor="center")
+                                        XFingerprint = ''
+                                        for x in range(64):
+                                            XFingerprint = XFingerprint + random.choice(list('1234567890abcdefghigklmnopqrstuvyxwzABCDEFGHIGKLMNOPQRSTUVYXWZ'))
 
-                                            XFingerprint = ''
-                                            for x in range(64):
-                                                XFingerprint = XFingerprint + random.choice(list('1234567890abcdefghigklmnopqrstuvyxwzABCDEFGHIGKLMNOPQRSTUVYXWZ'))
+                                        db_users.db_func.on_add(uname, email, passw, local_ip, XFingerprint)
 
-                                            db_users.db_func.on_add(uname, email, passw, local_ip, XFingerprint)
-
-                                            try:
-                                                self.vc_entry.destroy()
-                                            except Exception:
-                                                pass
-                                            try:
-                                                self.cancel_button.destroy()
-                                            except Exception:
-                                                pass
-                                            try:
-                                                self.refresh_button.destroy()
-                                            except Exception:
-                                                pass
-                                            
-                                            on_destroy_login()
-
-                                        else:
-
-                                            try:
-                                                self.mail_failure.destroy()
-                                            except Exception:
-                                                pass
-                                            try:
-                                                self.mail_success.destroy()
-                                            except Exception:
-                                                pass
-
-                                            self.failure_label = ct.CTkLabel(master=self, width=140, height=20, corner_radius=10, bg_color="#323036", text_color="#8854a8", text=f"Код введен неправильно")
-                                            self.vc_entry.delete(0, ct.END)
-                                            self.failure_label.place(relx=0.5, rely=0.35, anchor="center")
-                                            self.vc_entry.configure(state="normal", text_color="white", border_color="#575757")
-                                    
-                                    elif len(vc1) > 2:
-
-                                        if self.vc_entry.get() == str(vc1):
-
-                                            self.success_label = ct.CTkLabel(master=self, width=140, height=20, corner_radius=10, bg_color="#323036", text_color="#8854a8", text=f"Ваша почта успешно подтверждена, теперь вы можете войти")
-                                            self.success_label.place(relx=0.5, rely=0.35, anchor="center")
-
-                                            XFingerprint = ''
-                                            for x in range(64):
-                                                XFingerprint = XFingerprint + random.choice(list('1234567890abcdefghigklmnopqrstuvyxwzABCDEFGHIGKLMNOPQRSTUVYXWZ'))
-
-                                            db_users.db_func.on_add(uname, email, passw, local_ip, XFingerprint)
-
-                                            try:
-                                                self.vc_entry.destroy()
-                                            except Exception:
-                                                pass
-                                            try:
-                                                self.cancel_button.destroy()
-                                            except Exception:
-                                                pass
-                                            try:
-                                                self.refresh_button.destroy()
-                                            except Exception:
-                                                pass
-                                            
-                                            on_destroy_login()
+                                        try:
+                                            self.vc_entry.destroy()
+                                        except Exception:
+                                            pass
+                                        try:
+                                            self.cancel_button.destroy()
+                                        except Exception:
+                                            pass
+                                        try:
+                                            self.refresh_button.destroy()
+                                        except Exception:
+                                            pass
                                         
-                                        else:
+                                        on_destroy_login()
 
-                                            try:
-                                                self.mail_failure.destroy()
-                                            except Exception:
-                                                pass
-                                            try:
-                                                self.mail_success.destroy()
-                                            except Exception:
-                                                pass
+                                    else:
 
-                                            self.failure_label = ct.CTkLabel(master=self, width=140, height=20, corner_radius=10, bg_color="#323036", text_color="#8854a8", text=f"Код введен неправильно")
-                                            self.vc_entry.delete(0, ct.END)
-                                            self.failure_label.place(relx=0.5, rely=0.35, anchor="center")
-                                            self.vc_entry.configure(state="normal", text_color="white", border_color="#575757")
+                                        try:
+                                            self.mail_failure.destroy()
+                                        except Exception:
+                                            pass
+                                        try:
+                                            self.mail_success.destroy()
+                                        except Exception:
+                                            pass
+
+                                        self.failure_label = ct.CTkLabel(master=self, width=140, height=20, corner_radius=10, bg_color="#323036", text_color="#8854a8", text=f"Код введен неправильно")
+                                        self.vc_entry.delete(0, ct.END)
+                                        self.failure_label.place(relx=0.5, rely=0.35, anchor="center")
+                                        self.vc_entry.configure(state="normal", text_color="white", border_color="#575757")
+                                    
 
                                 else:
 

@@ -114,7 +114,7 @@ def on_env_creation(self):
             self.pass_entry.configure(border_color="#8854a8")
         
         else:
-            local_ip = socket.gethostbyname(socket.gethostname())
+            local_ip = socket.gethostbyname_ex(socket.gethostname())[2]
             check_index = db_users.db_func.on_check(name=str(self.login_entry.get()), passw=str(self.pass_entry.get()), ip=local_ip)
 
             print(check_index)
@@ -181,7 +181,6 @@ def on_env_creation(self):
 
                         if "|" in result:
                             answ, vc = result.split("|")
-                            print(vc)
                         else:
                             answ = "error"
 
