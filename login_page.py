@@ -433,10 +433,8 @@ def on_env_creation(self):
             self.success_label.destroy()
         except Exception:
             pass
-        try:
-            self.frame.destroy()
-        except Exception:
-            pass
+
+        self.frame.configure(height=350)
 
         self.login_entry.destroy()
         self.login_button.destroy()
@@ -463,8 +461,11 @@ def on_env_creation(self):
         except Exception:
             pass
 
-    self.frame = ct.CTkFrame(master=self, width=300, height=220, corner_radius=10, fg_color="#323036", bg_color="#17001F")
-    self.frame.place(relx=0.5, rely=0.507, anchor="center")
+    
+    if self.frame is not None:
+
+        self.frame = ct.CTkFrame(master=self, width=300, height=220, corner_radius=10, fg_color="#323036", bg_color="#17001F")
+        self.frame.place(relx=0.5, rely=0.507, anchor="center")
 
     self.login_entry = ct.CTkEntry(master=self, width=280, height=40, corner_radius=10, placeholder_text="Никнейм", fg_color="#3e3c42", bg_color="#323036", border_color="#575757", text_color="white")
     self.login_entry.place(relx=0.5, rely=0.45, anchor="center")

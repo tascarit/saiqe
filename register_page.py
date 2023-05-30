@@ -106,10 +106,7 @@ def on_reg(self):
             self.mail_success.destroy()
         except Exception:
             pass
-        try:
-            self.frame.destroy()
-        except Exception:
-            pass
+
 
         register_page.on_reg(self)
 
@@ -162,10 +159,8 @@ def on_reg(self):
             self.mail_success.destroy()
         except Exception:
             pass
-        try:
-            self.frame.destroy()
-        except Exception:
-            pass
+
+        self.frame.configure(height=220)
 
         login_page.on_env_creation(self)
 
@@ -547,9 +542,6 @@ def on_reg(self):
                         self.vc_entry.bind("<Return>", v1)
                 
                 on_ip_verify()
-
-    self.frame = ct.CTkFrame(master=self, width=300, height=300, corner_radius=10, fg_color="#323036", bg_color="#17001F")
-    self.frame.place(relx=0.5, rely=0.507, anchor="center")
 
     self.uname_entry = ct.CTkEntry(master=self, width=280, height=40, corner_radius=10, placeholder_text="Никнейм", bg_color="#323036", fg_color="#3e3c42", border_color="#575757", text_color="white")
     self.uname_entry.place(relx=0.5, rely=0.4, anchor="center")
