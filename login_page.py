@@ -5,6 +5,8 @@ import db_users.db_func
 import login_page
 import random
 from PIL import ImageTk, Image
+import body.general_page
+import stun
 
 def on_env_creation(self):
 
@@ -53,6 +55,10 @@ def on_env_creation(self):
             self.mail_success.destroy()
         except Exception:
             pass
+        try:
+            self.frame.destroy()
+        except Exception:
+            pass
 
         login_page.on_env_creation(self)
 
@@ -97,7 +103,7 @@ def on_env_creation(self):
                 pass
 
             self.le_text = ct.CTkLabel(master=self, width=140, height=20, corner_radius=10, bg_color="#323036", text_color="#8854a8", text="Поле никнейма не заполнено")
-            self.le_text.place(relx=0.5, rely=0.4, anchor="center")
+            self.le_text.place(relx=0.5, rely=0.41, anchor="center")
 
             self.login_entry.configure(border_color="#8854a8")
 
@@ -109,15 +115,14 @@ def on_env_creation(self):
                 pass
 
             self.pe_text = ct.CTkLabel(master=self, width=140, height=20, corner_radius=10, bg_color="#323036", text_color="#8854a8", text="Поле пароля не заполнено")
-            self.pe_text.place(relx=0.5, rely=0.4, anchor="center")
+            self.pe_text.place(relx=0.5, rely=0.41, anchor="center")
 
             self.pass_entry.configure(border_color="#8854a8")
         
         else:
-            local_ip = socket.gethostbyname_ex(socket.gethostname())[2]
+            local_ip = stun.get_ip_info()[1]
             check_index = db_users.db_func.on_check(name=str(self.login_entry.get()), passw=str(self.pass_entry.get()), ip=local_ip)
 
-            print(check_index)
 
             if check_index == 1:
 
@@ -132,7 +137,7 @@ def on_env_creation(self):
 
                 self.pass_failure = ct.CTkLabel(master=self, width=140, height=20, corner_radius=10, text_color="#8854a8", text="Пароль введен не корректно", bg_color="#323036")
                 self.pass_entry.configure(border_color="#8854a8")
-                self.pass_failure.place(relx=0.5, rely=0.4, anchor="center")
+                self.pass_failure.place(relx=0.5, rely=0.41, anchor="center")
 
             elif check_index == 2:
 
@@ -147,7 +152,7 @@ def on_env_creation(self):
 
                 self.uname_failure = ct.CTkLabel(master=self, width=140, height=20, corner_radius=10, text_color="#8854a8", text="Пользователя с таким никнеймом не существует", bg_color="#323036")
                 self.login_entry.configure(border_color="#8854a8")
-                self.uname_failure.place(relx=0.5, rely=0.4, anchor="center")
+                self.uname_failure.place(relx=0.5, rely=0.41, anchor="center")
 
             else:
 
@@ -168,7 +173,7 @@ def on_env_creation(self):
                             pass
 
                         self.ip_failure = ct.CTkLabel(master=self, width=140, height=20, corner_radius=10, text_color="#8854a8", text="Подтвердите вход с нового IP адреса", bg_color="#323036")
-                        self.ip_failure.place(relx=0.5, rely=0.4, anchor="center")
+                        self.ip_failure.place(relx=0.5, rely=0.41, anchor="center")
 
                         ip = "192.168.0.112"
                         port = 2417
@@ -202,7 +207,7 @@ def on_env_creation(self):
                                 pass
 
                             self.mail_failure = ct.CTkLabel(master=self, width=140, height=20, corner_radius=10, bg_color="#323036", text_color="#8854a8", text="Ошибка отправки письма, пожалуйста, сообщите - saiqe@internet.ru")
-                            self.mail_failure.place(relx=0.5, rely=0.35, anchor="center")
+                            self.mail_failure.place(relx=0.5, rely=0.41, anchor="center")
 
                             self.mail_failure.bind("<Button-1>", on_click_failure_or_success)
                         
@@ -327,7 +332,7 @@ def on_env_creation(self):
                                         if self.vc_entry.get() == vc:
 
                                             self.success_label = ct.CTkLabel(master=self, width=140, height=20, corner_radius=10, bg_color="#323036", text_color="#8854a8", text=f"Ваш IP адрес успешно подтвержден, теперь вы можете войти")
-                                            self.success_label.place(relx=0.5, rely=0.4, anchor="center")
+                                            self.success_label.place(relx=0.5, rely=0.41, anchor="center")
 
                                             db_users.db_func.on_update(name=str(self.login_entry.get()), ip=local_ip)
 
@@ -359,7 +364,7 @@ def on_env_creation(self):
 
                                             self.failure_label = ct.CTkLabel(master=self, width=140, height=20, corner_radius=10, bg_color="#323036", text_color="#8854a8", text=f"Код введен неправильно")
                                             self.vc_entry.delete(0, ct.END)
-                                            self.failure_label.place(relx=0.5, rely=0.4, anchor="center")
+                                            self.failure_label.place(relx=0.5, rely=0.41, anchor="center")
                                             self.vc_entry.configure(state="normal", text_color="white", border_color="#575757")
 
                                     else:
@@ -374,7 +379,7 @@ def on_env_creation(self):
                                             pass
 
                                         self.failure_label = ct.CTkLabel(master=self, width=140, height=20, corner_radius=10, bg_color="#323036", text_color="#8854a8", text=f"В поле для ввода кода могут быть только числа")
-                                        self.failure_label.place(relx=0.5, rely=0.4, anchor="center")
+                                        self.failure_label.place(relx=0.5, rely=0.41, anchor="center")
                                         self.vc_entry.delete(0, ct.END)
                                         self.vc_entry.configure(state="normal", text_color="white", border_color="#575757")
 
@@ -383,7 +388,35 @@ def on_env_creation(self):
                             self.vc_entry.bind("<Return>", v1)
 
                     elif check_index == 4:
-                        print("ok")
+                        body.general_page.on_start(self)
+                        try:
+                            self.bg_label.destroy()
+                        except Exception:
+                            pass
+                        try:
+                            self.frame.destroy()
+                        except Exception:
+                            pass
+                        try:
+                            self.login_entry.destroy()
+                        except Exception:
+                            pass
+                        try:
+                            self.pass_entry.destroy()
+                        except Exception:
+                            pass
+                        try:
+                            self.login_button.destroy()
+                        except Exception:
+                            pass
+                        try:
+                            self.register_button.destroy()
+                        except Exception:
+                            pass
+
+                    else:
+                        self.failure_label = ct.CTkLabel(master=self, width=140, height=20, corner_radius=10, bg_color="#323036", text_color="#8854a8", text=f"Пользователь не найден.")
+                        self.failure_label.place(relx=0.5, rely=0.41, anchor="center")
 
                 on_ip_verify()
 
@@ -433,8 +466,10 @@ def on_env_creation(self):
             self.success_label.destroy()
         except Exception:
             pass
-
-        self.frame.configure(height=350)
+        try:
+            self.frame.destroy()
+        except Exception:
+            pass
 
         self.login_entry.destroy()
         self.login_button.destroy()
@@ -461,11 +496,8 @@ def on_env_creation(self):
         except Exception:
             pass
 
-    
-    if self.frame is not None:
-
-        self.frame = ct.CTkFrame(master=self, width=300, height=220, corner_radius=10, fg_color="#323036", bg_color="#17001F")
-        self.frame.place(relx=0.5, rely=0.507, anchor="center")
+    self.frame = ct.CTkFrame(master=self, width=300, height=210, corner_radius=10, fg_color="#323036", bg_color="#17001F")
+    self.frame.place(relx=0.5, rely=0.507, anchor="center")
 
     self.login_entry = ct.CTkEntry(master=self, width=280, height=40, corner_radius=10, placeholder_text="Никнейм", fg_color="#3e3c42", bg_color="#323036", border_color="#575757", text_color="white")
     self.login_entry.place(relx=0.5, rely=0.45, anchor="center")

@@ -13,7 +13,19 @@ class App(ct.CTk):
 
         self.geometry("1600x900")
         self.title("Saiqe")
+        self.minsize(1600, 900)
         self.resizable(False, False)
+
+        self.config(bg="#323036")
+
+        self.columnconfigure(0, weight=1)
+        self.columnconfigure(1, weight=1)
+        self.rowconfigure(0, weight=1)
+
+        self.bg_label.rowconfigure(0, weight=1)
+        self.bg_label.columnconfigure(0, weight=1)
+
+        self.bg_label.grid(row=0, column=0, columnspan=2)
         
         login_page.on_env_creation(self)
 

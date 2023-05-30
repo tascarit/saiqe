@@ -5,6 +5,7 @@ from PIL import Image, ImageTk
 import db_users.db_func
 import register_page
 import random
+import stun
 
 def on_reg(self):
 
@@ -106,6 +107,10 @@ def on_reg(self):
             self.mail_success.destroy()
         except Exception:
             pass
+        try:
+            self.frame.destroy()
+        except Exception:
+            pass
 
 
         register_page.on_reg(self)
@@ -159,8 +164,10 @@ def on_reg(self):
             self.mail_success.destroy()
         except Exception:
             pass
-
-        self.frame.configure(height=220)
+        try:
+            self.frame.destroy()
+        except Exception:
+            pass
 
         login_page.on_env_creation(self)
 
@@ -206,7 +213,7 @@ def on_reg(self):
                 pass
 
             self.pdnm_text = ct.CTkLabel(master=self, width=140, height=20, corner_radius=10, text_color="#8854a8", text="Пароли не совпадают", bg_color="#323036")
-            self.pdnm_text.place(relx=0.5, rely=0.35, anchor="center")
+            self.pdnm_text.place(relx=0.5, rely=0.36, anchor="center")
             self.pass1_entry.configure(border_color="#8854a8")
             self.pass2_entry.configure(border_color="#8854a8")
             
@@ -230,7 +237,7 @@ def on_reg(self):
                 pass
 
             self.inc_text = ct.CTkLabel(master=self, width=140, height=20, corner_radius=10, text_color="#8854a8", text="Поле никнейма не заполнено", bg_color="#323036")
-            self.inc_text.place(relx=0.5, rely=0.35, anchor="center")
+            self.inc_text.place(relx=0.5, rely=0.36, anchor="center")
             self.uname_entry.configure(border_color="#8854a8")
 
         elif self.email_entry.get() == "":
@@ -252,7 +259,7 @@ def on_reg(self):
                 pass
 
             self.emer_text = ct.CTkLabel(master=self, width=140, height=20, corner_radius=10, text_color="#8854a8", text="Поле почты не заполнено", bg_color="#323036")
-            self.emer_text.place(relx=0.5, rely=0.35, anchor="center")
+            self.emer_text.place(relx=0.5, rely=0.36, anchor="center")
             self.email_entry.configure(border_color="#8854a8")
 
         elif "@" not in self.email_entry.get() or ".com" in self.email_entry.get():
@@ -273,10 +280,32 @@ def on_reg(self):
             except Exception:
                 pass
 
-            self.er_text = ct.CTkLabel(master=self, width=140, height=20, corner_radius=10, text_color="#8854a8", text="Почта некорректна, проверьте правильность ввода почты / Gmail почта не поддерживается", bg_color="#323036")
-            self.er_text.place(relx=0.5, rely=0.35, anchor="center")
+            self.er_text = ct.CTkLabel(master=self, width=140, height=20, corner_radius=10, text_color="#8854a8", text="", bg_color="#323036")
+            self.er_text.place(relx=0.5, rely=0.36, anchor="center")
             self.email_entry.configure(border_color="#8854a8")
-        
+
+        elif len(self.pass1_entry.get()) < 8:
+            try:
+                self.pdnm_text.destroy()
+            except Exception:
+                pass
+            try:
+                self.inc_text.destroy()
+            except Exception:
+                pass
+            try:
+                self.emer_text.destroy()
+            except Exception:
+                pass
+            try:
+                self.mail_success.destroy()
+            except Exception:
+                pass
+
+            self.er_text = ct.CTkLabel(master=self, width=140, height=20, corner_radius=10, text_color="#8854a8", text="Пароль минимум 8 символов", bg_color="#323036")
+            self.er_text.place(relx=0.5, rely=0.36, anchor="center")
+            self.pass1_entry.configure(border_color="#8854a8")
+            self.pass2_entry.configure(border_color="#8854a8")
 
         else:
             uname = self.uname_entry.get() 
@@ -292,7 +321,7 @@ def on_reg(self):
                     pass
 
                 self.email_exists_label = ct.CTkLabel(master=self, width=140, height=20, corner_radius=10, text_color="#8854a8", text="Пользователь с такой почтой уже существует", bg_color="#323036")
-                self.email_exists_label.place(relx=0.5, rely=0.35, anchor="center")
+                self.email_exists_label.place(relx=0.5, rely=0.36, anchor="center")
                 self.email_entry.configure(border_color="#8854a8")
 
             elif check_index == 1:
@@ -302,7 +331,7 @@ def on_reg(self):
                     pass
 
                 self.uname_exists_label = ct.CTkLabel(master=self, width=140, height=20, corner_radius=10, text_color="#8854a8", text="Пользователь с таким никнеймом уже существует", bg_color="#323036")
-                self.uname_exists_label.place(relx=0.5, rely=0.35, anchor="center")
+                self.uname_exists_label.place(relx=0.5, rely=0.36, anchor="center")
                 self.uname_entry.configure(border_color="#8854a8")
 
             else:
@@ -329,7 +358,7 @@ def on_reg(self):
                     ip = "192.168.0.112"
                     port = 2417
 
-                    local_ip = socket.gethostbyname_ex(socket.gethostname())[2]
+                    local_ip = stun.get_ip_info()[1]
 
                     lstnr = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                     lstnr.connect((ip, port))
@@ -362,7 +391,7 @@ def on_reg(self):
                             pass
 
                         self.mail_failure = ct.CTkLabel(master=self, width=140, height=20, corner_radius=10, bg_color="#323036", text_color="#8854a8", text="Ошибка отправки письма, пожалуйста, сообщите - saiqe@internet.ru")
-                        self.mail_failure.place(relx=0.5, rely=0.35, anchor="center")
+                        self.mail_failure.place(relx=0.5, rely=0.36, anchor="center")
 
                         self.mail_failure.bind("<Button-1>", on_click_failure_or_success)
 
@@ -434,7 +463,7 @@ def on_reg(self):
                             on_destroy_reg()
 
                         self.waiting_label = ct.CTkLabel(master=self, width=140, height=20, corner_radius=10, bg_color="#323036", text_color="#8854a8", text=f"Подтвердите вашу почту | У вас есть 10 минут")
-                        self.waiting_label.place(relx=0.5, rely=0.35, anchor="center")
+                        self.waiting_label.place(relx=0.5, rely=0.36, anchor="center")
 
                         self.uname_entry.configure(state="disabled", text_color="gray", border_color="gray")
                         self.email_entry.configure(state="disabled", text_color="gray", border_color="gray")
@@ -479,8 +508,8 @@ def on_reg(self):
 
                                     if self.vc_entry.get() == vc:
 
-                                        self.success_label = ct.CTkLabel(master=self, width=140, height=20, corner_radius=10, bg_color="#323036", text_color="#8854a8", text=f"Ваша почта успешно подтверждена, теперь вы можете войти")
-                                        self.success_label.place(relx=0.5, rely=0.35, anchor="center")
+                                        self.success_label = ct.CTkLabel(master=self, width=140, height=20, corner_radius=10, bg_color="#323036", text_color="#8854a8", text=f"Ваша почта успешно подтверждена")
+                                        self.success_label.place(relx=0.5, rely=0.41, anchor="center")
 
                                         XFingerprint = ''
                                         for x in range(64):
@@ -516,7 +545,7 @@ def on_reg(self):
 
                                         self.failure_label = ct.CTkLabel(master=self, width=140, height=20, corner_radius=10, bg_color="#323036", text_color="#8854a8", text=f"Код введен неправильно")
                                         self.vc_entry.delete(0, ct.END)
-                                        self.failure_label.place(relx=0.5, rely=0.35, anchor="center")
+                                        self.failure_label.place(relx=0.5, rely=0.36, anchor="center")
                                         self.vc_entry.configure(state="normal", text_color="white", border_color="#575757")
                                     
 
@@ -532,7 +561,7 @@ def on_reg(self):
                                         pass
                                     
                                     self.failure_label = ct.CTkLabel(master=self, width=140, height=20, corner_radius=10, bg_color="#323036", text_color="#8854a8", text=f"В поле для ввода кода могут быть только числа")
-                                    self.failure_label.place(relx=0.5, rely=0.35, anchor="center")
+                                    self.failure_label.place(relx=0.5, rely=0.36, anchor="center")
                                     self.vc_entry.delete(0, ct.END)
                                     self.vc_entry.configure(state="normal", text_color="white", border_color="#575757")
 
@@ -542,6 +571,9 @@ def on_reg(self):
                         self.vc_entry.bind("<Return>", v1)
                 
                 on_ip_verify()
+
+    self.frame = ct.CTkFrame(master=self, width=300, height=297, corner_radius=10, fg_color="#323036", bg_color="#17001F")
+    self.frame.place(relx=0.5, rely=0.507, anchor="center")
 
     self.uname_entry = ct.CTkEntry(master=self, width=280, height=40, corner_radius=10, placeholder_text="Никнейм", bg_color="#323036", fg_color="#3e3c42", border_color="#575757", text_color="white")
     self.uname_entry.place(relx=0.5, rely=0.4, anchor="center")

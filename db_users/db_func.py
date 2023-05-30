@@ -19,7 +19,7 @@ def on_check(name, email=None, passw=None, ip=None):
     if email is not None:
         if users_coll.find({"email": str(email)}):
             for x in users_coll.find({"email": str(email)}):
-                if email in str(x):
+                if email in x:
                     return 0
                 else:
                     pass
@@ -29,7 +29,7 @@ def on_check(name, email=None, passw=None, ip=None):
                 if passw is not None:
                     if passw in str(x):
                         if ip is not None:
-                            if ip in str(x):
+                            if ip in x['ip_addresses']:
                                 return 4
                             else:
                                 return 3
