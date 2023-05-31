@@ -37,73 +37,77 @@ class App(ct.CTk):
         self.bg_label.grid(row=0, column=0, columnspan=2)
 
 
-        try:
-            xf = ''
+        xf = ''
 
-            if platform.system() == "Linux":
-                salt_key = [x for x in open('/home/{}/Saiqe/cache.txt'.format(getpass.getuser()))][0].encode().decode()
-                ip = "192.168.0.112"
-                port = 2417
+        if platform.system() == "Linux":
+            salt_key = [x for x in open('/home/{}/Saiqe/cache.txt'.format(getpass.getuser()))][0].encode().decode()
+            ip = "localhost"
+            port = 2417
 
-                bytes_xf = "decrypt?" + str(salt_key)
+            bytes_xf = "decrypt?" + str(salt_key)
 
-                lstnr = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                lstnr.connect((ip, port))
-                lstnr.send(str(bytes_xf).encode())
+            lstnr = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            lstnr.connect((ip, port))
+            lstnr.send(str(bytes_xf).encode())
 
-                result = lstnr.recv(1024).decode()
+            result = lstnr.recv(1024).decode()
 
-                lstnr.close()
+            lstnr.close()
 
-                xf = result
+            xf = result
 
-            elif platform.system() == "Windows":
-                salt_key = [x for x in open('/home/{}/Saiqe/cache.txt'.format(getpass.getuser()))][0].encode().decode()
-                ip = "192.168.0.112"
-                port = 2417
+            if FileNotFoundError:
+                login_page.on_env_creation(self)
 
-                bytes_xf = "decrypt?" + str(salt_key)
+        elif platform.system() == "Windows":
+            salt_key = [x for x in open('/home/{}/Saiqe/cache.txt'.format(getpass.getuser()))][0].encode().decode()
+            ip = "localhost"
+            port = 2417
 
-                lstnr = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                lstnr.connect((ip, port))
-                lstnr.send(str(bytes_xf).encode())
+            bytes_xf = "decrypt?" + str(salt_key)
 
-                result = lstnr.recv(1024).decode()
+            lstnr = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            lstnr.connect((ip, port))
+            lstnr.send(str(bytes_xf).encode())
 
-                lstnr.close()
+            result = lstnr.recv(1024).decode()
 
-                xf = result
+            lstnr.close()
 
-            if len(str(xf)) > 5:
+            xf = result
 
-                ip = "192.168.0.112"
-                port = 2417
+            if FileNotFoundError:
+                login_page.on_env_creation(self)
 
-                bytes_xf = "111111?" + str(xf)
+        if len(str(xf)) > 5:
 
-                lstnr = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                lstnr.connect((ip, port))
-                lstnr.send(str(bytes_xf).encode())
+            ip = "localhost"
+            port = 2417
 
-                result = lstnr.recv(1024).decode()
+            bytes_xf = "111111?" + str(xf)
 
-                lstnr.close()
+            lstnr = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            lstnr.connect((ip, port))
+            lstnr.send(str(bytes_xf).encode())
 
-                if "|" in result:
-                    name, email, passw = result.split("|")
+            result = lstnr.recv(1024).decode()
 
-                    try:
-                        self.bg_label.destroy()
-                    except Exception:
-                        pass
+            lstnr.close()
 
-                    body.general_page.on_start(self, name, email, passw)
-                else:
-                    login_page.on_env_creation(self)
+            if "|" in result:
 
+                name, email, passw = result.split("|")
+
+                try:
+                    self.bg_label.destroy()
+                except Exception:
+                    pass
+
+                body.general_page.on_start(self, name, passw)
             else:
                 login_page.on_env_creation(self)
-        except FileNotFoundError:
+
+        else:
             login_page.on_env_creation(self)
 
             

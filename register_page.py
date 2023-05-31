@@ -357,7 +357,7 @@ def on_reg(self):
                     except Exception:
                         pass
 
-                    ip = "192.168.0.112"
+                    ip = "localhost"
                     port = 2417
 
                     local_ip = stun.get_ip_info()[1]

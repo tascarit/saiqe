@@ -185,7 +185,7 @@ def on_env_creation(self):
                         self.ip_failure = ct.CTkLabel(master=self, width=140, height=20, corner_radius=10, text_color="#8854a8", text="Подтвердите вход с нового IP адреса", bg_color="#323036")
                         self.ip_failure.place(relx=0.5, rely=0.41, anchor="center")
 
-                        ip = "192.168.0.112"
+                        ip = "localhost"
                         port = 2417
 
                         lstnr = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -399,6 +399,9 @@ def on_env_creation(self):
 
                     elif str(check_index) == "4":
 
+                        name = self.login_entry.get()
+                        passw = self.pass_entry.get()
+
                         try:
                             self.bg_label.destroy()
                         except Exception:
@@ -426,7 +429,7 @@ def on_env_creation(self):
 
                         if platform.system() == 'Linux':
 
-                            ip = "192.168.0.112"
+                            ip = "localhost"
                             port = 2417
 
                             bytes_xf = "encrypt?" + str(xf)
@@ -450,7 +453,7 @@ def on_env_creation(self):
                                 f.close()
 
                         if platform.system() == 'Windows':
-                            ip = "192.168.0.112"
+                            ip = "localhost"
                             port = 2417
 
                             bytes_xf = "encrypt?" + str(xf)
@@ -473,7 +476,7 @@ def on_env_creation(self):
                                 f.write(str(token)[:-1][2:])
                                 f.close()
 
-                        body.general_page.on_start(self)
+                        body.general_page.on_start(self, name, passw)
 
 
 

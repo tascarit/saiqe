@@ -15,7 +15,7 @@ with open("/home/tscrt/Desktop/saiqe/db_users/index.json", "r") as f:
 
 njit(fastmath=True, cache=True, parallel=True)
 def on_add(name, email, passw, ip, xf):
-    users_coll.insert_one({"_id": index_json['index'], "name": str(name), "email": str(email), "passw": str(passw), "ip_addresses": [str(ip), ], "XFingerprint": str(xf)})
+    users_coll.insert_one({"_id": index_json['index'], "name": str(name), "email": str(email), "passw": str(passw), "ip_addresses": [str(ip), ], "XFingerprint": str(xf), "avatar_id": "default"})
     index_json['index'] += 1
 
 njit(fastmath=True, cache=True, parallel=True)
@@ -72,3 +72,14 @@ def on_token_find(xf):
             return x['name'] + "|" + x['email'] + "|" + x['passw']
         if xf != x['XFingerprint']:
             return 0
+
+def on_avatar_find(name):
+    for x in users_coll.find({"name": str(name)}):
+        avatar_id = x["avatar_id"]
+
+        if avatar_id == "":
+            avatar_id = "default"
+        if avatar_id == None:
+            avatar_id = "default"
+
+        return avatar_id
