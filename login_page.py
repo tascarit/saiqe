@@ -7,7 +7,13 @@ import random
 from PIL import ImageTk, Image
 import body.general_page
 import stun
+from numba import njit
+from cryptography.fernet import Fernet
+import platform
+import getpass
+import os
 
+njit(fastmath=True, cache=True, parallel=True)
 def on_env_creation(self):
 
     def on_destroy_login():
@@ -122,6 +128,10 @@ def on_env_creation(self):
         else:
             local_ip = stun.get_ip_info()[1]
             check_index = db_users.db_func.on_check(name=str(self.login_entry.get()), passw=str(self.pass_entry.get()), ip=local_ip)
+            if "|" in str(check_index):
+                check_index, xf = check_index.split("|")
+            else:
+                check_index = check_index
 
 
             if check_index == 1:
@@ -387,8 +397,8 @@ def on_env_creation(self):
                             self.vc_entry.place(relx=0.5, rely=0.55, anchor="center")
                             self.vc_entry.bind("<Return>", v1)
 
-                    elif check_index == 4:
-                        body.general_page.on_start(self)
+                    elif str(check_index) == "4":
+
                         try:
                             self.bg_label.destroy()
                         except Exception:
@@ -413,6 +423,37 @@ def on_env_creation(self):
                             self.register_button.destroy()
                         except Exception:
                             pass
+
+                        if platform.system() == 'Linux':
+
+                            salt = Fernet(b'K9DYf-cxPFpxUYYYkq2oFeUsUmkABveKXU87ZS0pkG8=')
+
+                            token = salt.encrypt(str(xf).encode('utf-8'))
+
+                            try:
+                                os.mkdir('/home/{}/Saiqe'.format(getpass.getuser()))
+                            except FileExistsError:
+                                pass
+                            with open('/home/{}/Saiqe/cache.txt'.format(getpass.getuser()), 'w+') as f:
+                                f.write(str(token)[:-1][2:])
+                                f.close()
+
+                        if platform.system() == 'Windows':
+                            salt = Fernet(b'K9DYf-cxPFpxUYYYkq2oFeUsUmkABveKXU87ZS0pkG8=')
+
+                            token = salt.encrypt(str(xf).encode('utf-8'))
+
+                            try:
+                                os.mkdir('{}//Users/{}/ProgramData/Saiqe'.format(os.getenv("SystemDrive"), getpass.getuser()))
+                            except FileExistsError:
+                                pass
+                            with open('{}//Users/{}/ProgramData/Saiqe/cache.txt'.format(os.getenv("SystemDrive"), getpass.getuser()), 'w+') as f:
+                                f.write(str(token)[:-1][2:])
+                                f.close()
+
+                        body.general_page.on_start(self)
+
+
 
                     else:
                         self.failure_label = ct.CTkLabel(master=self, width=140, height=20, corner_radius=10, bg_color="#323036", text_color="#8854a8", text=f"Пользователь не найден.")

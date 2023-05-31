@@ -6,7 +6,9 @@ import db_users.db_func
 import register_page
 import random
 import stun
+from numba import njit
 
+njit(fastmath=True, cache=True, parallel=True)
 def on_reg(self):
 
     def callback(event):

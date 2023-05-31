@@ -1,8 +1,17 @@
 import customtkinter as ct
 import login_page
 from PIL import ImageTk, Image
+from numba import njit
+import platform
+import getpass
+from cryptography.fernet import Fernet
+import db_users
+import body.general_page
+import socket
 
+njit(fastmath=True, cache=True, parallel=True)
 class App(ct.CTk):
+    
     def __init__(self):
         super().__init__()
 
@@ -26,8 +35,50 @@ class App(ct.CTk):
         self.bg_label.columnconfigure(0, weight=1)
 
         self.bg_label.grid(row=0, column=0, columnspan=2)
-        
-        login_page.on_env_creation(self)
+
+
+        try:
+            xf = ''
+
+            if platform.system() == "Linux":
+                salt_key = [x for x in open('/home/{}/Saiqe/cache.txt'.format(getpass.getuser()))][0].encode().decode()
+                salt = Fernet(b'K9DYf-cxPFpxUYYYkq2oFeUsUmkABveKXU87ZS0pkG8=')
+                xf = salt.decrypt(salt_key).decode()
+
+            elif platform.system() == "Windows":
+                salt_key = [x for x in open('/home/{}/Saiqe/cache.txt'.format(getpass.getuser()))][0].encode().decode()
+                salt = Fernet(b'K9DYf-cxPFpxUYYYkq2oFeUsUmkABveKXU87ZS0pkG8=')
+                xf = salt.decrypt(salt_key).decode()
+
+            if len(str(xf)) > 5:
+
+                ip = "192.168.0.112"
+                port = 2417
+
+                bytes_xf = "111111?" + str(xf)
+
+                lstnr = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                lstnr.connect((ip, port))
+                lstnr.send(str(bytes_xf).encode())
+
+                result = lstnr.recv(1024).decode()
+
+                lstnr.close()
+
+                if "|" in result:
+                    name, email, passw = result.split("|")
+                    body.general_page.on_start(self)
+                else:
+                    login_page.on_env_creation(self)
+
+            else:
+                login_page.on_env_creation(self)
+        except FileNotFoundError:
+            login_page.on_env_creation(self)
+
+            
+
+
 
 if __name__ == "__main__":
     App().mainloop()

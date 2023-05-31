@@ -20,7 +20,14 @@ while True:
 
     if len(str(msg)) > 24:
 
-        if "|" in str(msg):
+        if "111111?" in str(msg):
+
+            xf = str(msg)[7:]
+            answ = db_func.on_token_find(xf)
+
+            conn.send(str(answ).encode())
+
+        elif "|" in str(msg):
 
             uname, email, passw, local_ip = msg.split("|")
             res = smtp.on_msg_send(email)
