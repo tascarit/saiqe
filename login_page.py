@@ -7,13 +7,11 @@ import random
 from PIL import ImageTk, Image
 import body.general_page
 import stun
-from numba import njit
 from cryptography.fernet import Fernet
 import platform
 import getpass
 import os
 
-njit(fastmath=True, cache=True, parallel=True)
 def on_env_creation(self):
 
     def on_destroy_login():

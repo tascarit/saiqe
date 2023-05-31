@@ -1,7 +1,6 @@
 import customtkinter as ct
 import login_page
 from PIL import ImageTk, Image
-from numba import njit
 import platform
 import getpass
 from cryptography.fernet import Fernet
@@ -9,7 +8,6 @@ import db_users
 import body.general_page
 import socket
 
-njit(fastmath=True, cache=True, parallel=True)
 class App(ct.CTk):
     
     def __init__(self):
@@ -24,6 +22,8 @@ class App(ct.CTk):
         self.title("Saiqe")
         self.minsize(1600, 900)
         self.resizable(False, False)
+
+        self.iconphoto(False, ImageTk.PhotoImage(Image.open("/home/tscrt/Desktop/saiqe/icon.png")))
 
         self.config(bg="#323036")
 
@@ -40,43 +40,45 @@ class App(ct.CTk):
         xf = ''
 
         if platform.system() == "Linux":
-            salt_key = [x for x in open('/home/{}/Saiqe/cache.txt'.format(getpass.getuser()))][0].encode().decode()
-            ip = "localhost"
-            port = 2417
+            try:
+                salt_key = [x for x in open('/home/{}/Saiqe/cache.txt'.format(getpass.getuser()))][0].encode().decode()
+                ip = "localhost"
+                port = 2417
 
-            bytes_xf = "decrypt?" + str(salt_key)
+                bytes_xf = "decrypt?" + str(salt_key)
 
-            lstnr = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            lstnr.connect((ip, port))
-            lstnr.send(str(bytes_xf).encode())
+                lstnr = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                lstnr.connect((ip, port))
+                lstnr.send(str(bytes_xf).encode())
 
-            result = lstnr.recv(1024).decode()
+                result = lstnr.recv(1024).decode()
 
-            lstnr.close()
+                lstnr.close()
 
-            xf = result
+                xf = result
 
-            if FileNotFoundError:
+            except Exception:
                 login_page.on_env_creation(self)
 
         elif platform.system() == "Windows":
-            salt_key = [x for x in open('/home/{}/Saiqe/cache.txt'.format(getpass.getuser()))][0].encode().decode()
-            ip = "localhost"
-            port = 2417
+            try:
+                salt_key = [x for x in open('/home/{}/Saiqe/cache.txt'.format(getpass.getuser()))][0].encode().decode()
+                ip = "localhost"
+                port = 2417
 
-            bytes_xf = "decrypt?" + str(salt_key)
+                bytes_xf = "decrypt?" + str(salt_key)
 
-            lstnr = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            lstnr.connect((ip, port))
-            lstnr.send(str(bytes_xf).encode())
+                lstnr = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                lstnr.connect((ip, port))
+                lstnr.send(str(bytes_xf).encode())
 
-            result = lstnr.recv(1024).decode()
+                result = lstnr.recv(1024).decode()
 
-            lstnr.close()
+                lstnr.close()
 
-            xf = result
+                xf = result
 
-            if FileNotFoundError:
+            except Exception:
                 login_page.on_env_creation(self)
 
         if len(str(xf)) > 5:

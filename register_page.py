@@ -6,12 +6,18 @@ import db_users.db_func
 import register_page
 import random
 import stun
-from numba import njit
 
-njit(fastmath=True, cache=True, parallel=True)
 def on_reg(self):
 
     def callback(event):
+        try:
+            self.uname_exists_label.destroy()
+        except Exception:
+            pass
+        try:
+            self.email_exists_label.destroy()
+        except Exception:
+            pass
         try:
             self.inc_text.destroy()
         except Exception:
@@ -48,6 +54,14 @@ def on_reg(self):
 
     def on_destroy_temp_msg():
         try:
+            self.uname_exists_label.destroy()
+        except Exception:
+            pass
+        try:
+            self.email_exists_label.destroy()
+        except Exception:
+            pass
+        try:
             self.inc_text.destroy()
         except Exception:
             pass
@@ -65,6 +79,14 @@ def on_reg(self):
             pass
 
     def on_destroy_reg():
+        try:
+            self.uname_exists_label.destroy()
+        except Exception:
+            pass
+        try:
+            self.email_exists_label.destroy()
+        except Exception:
+            pass
         try:
             self.inc_text.destroy()
         except Exception:
@@ -118,6 +140,15 @@ def on_reg(self):
         register_page.on_reg(self)
 
     def on_destroy_login():
+
+        try:
+            self.uname_exists_label.destroy()
+        except Exception:
+            pass
+        try:
+            self.email_exists_label.destroy()
+        except Exception:
+            pass
         try:
             self.inc_text.destroy()
         except Exception:
@@ -198,6 +229,14 @@ def on_reg(self):
 
         if self.pass1_entry.get() != self.pass2_entry.get():
             try:
+                self.uname_exists_label.destroy()
+            except Exception:
+                pass
+            try:
+                self.email_exists_label.destroy()
+            except Exception:
+                pass
+            try:
                 self.inc_text.destroy()
             except Exception:
                 pass
@@ -222,6 +261,14 @@ def on_reg(self):
         
         elif self.uname_entry.get() == "":
             try:
+                self.uname_exists_label.destroy()
+            except Exception:
+                pass
+            try:
+                self.email_exists_label.destroy()
+            except Exception:
+                pass
+            try:
                 self.pdnm_text.destroy()
             except Exception:
                 pass
@@ -243,6 +290,14 @@ def on_reg(self):
             self.uname_entry.configure(border_color="#8854a8")
 
         elif self.email_entry.get() == "":
+            try:
+                self.uname_exists_label.destroy()
+            except Exception:
+                pass
+            try:
+                self.email_exists_label.destroy()
+            except Exception:
+                pass
             try:
                 self.pdnm_text.destroy()
             except Exception:
@@ -266,6 +321,14 @@ def on_reg(self):
 
         elif "@" not in self.email_entry.get() or ".com" in self.email_entry.get():
             try:
+                self.uname_exists_label.destroy()
+            except Exception:
+                pass
+            try:
+                self.email_exists_label.destroy()
+            except Exception:
+                pass
+            try:
                 self.pdnm_text.destroy()
             except Exception:
                 pass
@@ -287,6 +350,14 @@ def on_reg(self):
             self.email_entry.configure(border_color="#8854a8")
 
         elif len(self.pass1_entry.get()) < 8:
+            try:
+                self.uname_exists_label.destroy()
+            except Exception:
+                pass
+            try:
+                self.email_exists_label.destroy()
+            except Exception:
+                pass
             try:
                 self.pdnm_text.destroy()
             except Exception:
@@ -310,6 +381,14 @@ def on_reg(self):
             self.pass2_entry.configure(border_color="#8854a8")
 
         else:
+            try:
+                self.uname_exists_label.destroy()
+            except Exception:
+                pass
+            try:
+                self.email_exists_label.destroy()
+            except Exception:
+                pass
             uname = self.uname_entry.get() 
             email = self.email_entry.get()
             passw = self.pass1_entry.get()
