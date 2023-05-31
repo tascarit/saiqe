@@ -426,9 +426,20 @@ def on_env_creation(self):
 
                         if platform.system() == 'Linux':
 
-                            salt = Fernet(b'K9DYf-cxPFpxUYYYkq2oFeUsUmkABveKXU87ZS0pkG8=')
+                            ip = "192.168.0.112"
+                            port = 2417
 
-                            token = salt.encrypt(str(xf).encode('utf-8'))
+                            bytes_xf = "encrypt?" + str(xf)
+
+                            lstnr = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                            lstnr.connect((ip, port))
+                            lstnr.send(str(bytes_xf).encode())
+
+                            result = lstnr.recv(1024).decode()
+
+                            lstnr.close()
+
+                            token = result
 
                             try:
                                 os.mkdir('/home/{}/Saiqe'.format(getpass.getuser()))
@@ -439,9 +450,20 @@ def on_env_creation(self):
                                 f.close()
 
                         if platform.system() == 'Windows':
-                            salt = Fernet(b'K9DYf-cxPFpxUYYYkq2oFeUsUmkABveKXU87ZS0pkG8=')
+                            ip = "192.168.0.112"
+                            port = 2417
 
-                            token = salt.encrypt(str(xf).encode('utf-8'))
+                            bytes_xf = "encrypt?" + str(xf)
+
+                            lstnr = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                            lstnr.connect((ip, port))
+                            lstnr.send(str(bytes_xf).encode())
+
+                            result = lstnr.recv(1024).decode()
+
+                            lstnr.close()
+
+                            token = result
 
                             try:
                                 os.mkdir('{}//Users/{}/ProgramData/Saiqe'.format(os.getenv("SystemDrive"), getpass.getuser()))

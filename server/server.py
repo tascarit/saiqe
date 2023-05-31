@@ -3,6 +3,7 @@ import smtp
 import sys
 sys.path.insert(0, "/home/tscrt/Desktop/saiqe/db_users/")
 import db_func
+import hash_token
 
 ip = "192.168.0.112"
 port = 2417
@@ -18,7 +19,7 @@ while True:
 
     msg = conn.recv(1024).decode()
 
-    if len(str(msg)) > 24:
+    if len(str(msg)) > 10:
 
         if "111111?" in str(msg):
 
@@ -32,6 +33,16 @@ while True:
             uname, email, passw, local_ip = msg.split("|")
             res = smtp.on_msg_send(email)
             conn.send(res.encode())
+
+        elif "encrypt?" in str(msg):
+            xf = hash_token.on_encrypt(str(msg)[8:])
+
+            conn.send(xf.encode())
+
+        elif "decrypt?" in str(msg):
+            token = hash_token.on_decrypt(str(msg)[8:])
+
+            conn.send(token.encode())
 
     else:
         

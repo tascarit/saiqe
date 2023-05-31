@@ -42,13 +42,37 @@ class App(ct.CTk):
 
             if platform.system() == "Linux":
                 salt_key = [x for x in open('/home/{}/Saiqe/cache.txt'.format(getpass.getuser()))][0].encode().decode()
-                salt = Fernet(b'K9DYf-cxPFpxUYYYkq2oFeUsUmkABveKXU87ZS0pkG8=')
-                xf = salt.decrypt(salt_key).decode()
+                ip = "192.168.0.112"
+                port = 2417
+
+                bytes_xf = "decrypt?" + str(salt_key)
+
+                lstnr = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                lstnr.connect((ip, port))
+                lstnr.send(str(bytes_xf).encode())
+
+                result = lstnr.recv(1024).decode()
+
+                lstnr.close()
+
+                xf = result
 
             elif platform.system() == "Windows":
                 salt_key = [x for x in open('/home/{}/Saiqe/cache.txt'.format(getpass.getuser()))][0].encode().decode()
-                salt = Fernet(b'K9DYf-cxPFpxUYYYkq2oFeUsUmkABveKXU87ZS0pkG8=')
-                xf = salt.decrypt(salt_key).decode()
+                ip = "192.168.0.112"
+                port = 2417
+
+                bytes_xf = "decrypt?" + str(salt_key)
+
+                lstnr = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                lstnr.connect((ip, port))
+                lstnr.send(str(bytes_xf).encode())
+
+                result = lstnr.recv(1024).decode()
+
+                lstnr.close()
+
+                xf = result
 
             if len(str(xf)) > 5:
 
@@ -67,7 +91,13 @@ class App(ct.CTk):
 
                 if "|" in result:
                     name, email, passw = result.split("|")
-                    body.general_page.on_start(self)
+
+                    try:
+                        self.bg_label.destroy()
+                    except Exception:
+                        pass
+
+                    body.general_page.on_start(self, name, email, passw)
                 else:
                     login_page.on_env_creation(self)
 
