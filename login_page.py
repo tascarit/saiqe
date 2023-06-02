@@ -9,6 +9,7 @@ import body.general_page
 import stun
 from cryptography.fernet import Fernet
 import platform
+from _tkinter import TclError
 import getpass
 import os
 
@@ -303,8 +304,72 @@ def on_env_creation(self):
                             except Exception:
                                 pass
 
-                            cancel_image = ImageTk.PhotoImage(Image.open("/home/tscrt/Desktop/saiqe/images/cancel.png").resize((20, 20), Image.ANTIALIAS))
-                            refresh_image = ImageTk.PhotoImage(Image.open("/home/tscrt/Desktop/saiqe/images/refresh.png").resize((20, 20), Image.ANTIALIAS))
+                            ip = "localhost"
+                            port = 2417
+
+                            lstnr = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                            lstnr.connect((ip, port))
+                            lstnr.send("get_c_picture?".encode())
+
+                            if platform.system() == "Linux":
+                                file = open('/home/{}/Saiqe/cancel.png'.format(getpass.getuser()), "w+b")
+                                while True:
+
+                                    image_data = lstnr.recv(1024)
+                                    file.write(image_data)
+
+                                    if not image_data:
+                                        file.close()
+                                        break
+
+                                cancel_image = ImageTk.PhotoImage(Image.open('/home/{}/Saiqe/cancel.png'.format(getpass.getuser())).resize((20, 20)), Image.ANTIALIAS)
+
+                            elif platform.system() == "Windows":
+                                file = open('{}/Users/{}/ProgramData/Saiqe/cancel.png'.format(os.getenv("SystemDrive"), getpass.getuser()), "w+b")
+                                while True:
+
+                                    image_data = lstnr.recv(1024)
+                                    file.write(image_data)
+                                    
+                                    if not image_data:
+                                        file.close()
+                                        break
+
+                                cancel_image = ImageTk.PhotoImage(Image.open('{}/Users/{}/ProgramData/Saiqe/cancel.png'.format(os.getenv("SystemDrive"), getpass.getuser())).resize((20, 20)), Image.ANTIALIAS)
+
+                            lstnr.close()
+
+                            lstnr = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                            lstnr.connect((ip, port))
+                            lstnr.send("get_r_picture?".encode())
+
+                            if platform.system() == "Linux":
+                                file = open('/home/{}/Saiqe/refresh.png'.format(getpass.getuser()), "w+b")
+                                while True:
+
+                                    image_data = lstnr.recv(1024)
+                                    file.write(image_data)
+
+                                    if not image_data:
+                                        file.close()
+                                        break
+
+                                refresh_image = ImageTk.PhotoImage(Image.open('/home/{}/Saiqe/refresh.png'.format(getpass.getuser())).resize((20, 20)), Image.ANTIALIAS)
+
+                            elif platform.system() == "Windows":
+                                file = open('{}/Users/{}/ProgramData/Saiqe/refresh.png'.format(os.getenv("SystemDrive"), getpass.getuser()), "w+b")
+                                while True:
+
+                                    image_data = lstnr.recv(1024)
+                                    file.write(image_data)
+                                    
+                                    if not image_data:
+                                        file.close()
+                                        break
+
+                                refresh_image = ImageTk.PhotoImage(Image.open('{}/Users/{}/ProgramData/Saiqe/refresh.png'.format(os.getenv("SystemDrive"), getpass.getuser())).resize((20, 20)), Image.ANTIALIAS)
+
+                            lstnr.close()
 
                             self.cancel_button = ct.CTkButton(master=self, image=cancel_image, width=40, height=40, corner_radius=10, bg_color="#323036", hover_color="#323036", fg_color="#44404a", text = "", command=on_cancel_button)
                             self.cancel_button.place(relx=0.575, rely=0.55, anchor="center")
@@ -467,10 +532,10 @@ def on_env_creation(self):
                             token = result
 
                             try:
-                                os.mkdir('{}//Users/{}/ProgramData/Saiqe'.format(os.getenv("SystemDrive"), getpass.getuser()))
+                                os.mkdir('{}/Users/{}/ProgramData/Saiqe'.format(os.getenv("SystemDrive"), getpass.getuser()))
                             except FileExistsError:
                                 pass
-                            with open('{}//Users/{}/ProgramData/Saiqe/cache.txt'.format(os.getenv("SystemDrive"), getpass.getuser()), 'w+') as f:
+                            with open('{}/Users/{}/ProgramData/Saiqe/cache.txt'.format(os.getenv("SystemDrive"), getpass.getuser()), 'w+') as f:
                                 f.write(str(token)[:-1][2:])
                                 f.close()
 
@@ -576,10 +641,16 @@ def on_env_creation(self):
     self.register_button.place(relx=0.5, rely=0.59, anchor="center")
 
     def on_register_enter(event):
-        self.register_button.configure(text_color="#645578")
+        try:
+            self.register_button.configure(text_color="#645578")
+        except TclError:
+            pass
 
     def on_register_leave(event):
-        self.register_button.configure(text_color="white")
+        try:
+            self.register_button.configure(text_color="white")
+        except TclError:
+            pass
 
     self.register_button.bind(sequence="<Enter>", command=on_register_enter)
     self.register_button.bind("<Leave>", on_register_leave)

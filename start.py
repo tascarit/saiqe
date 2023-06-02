@@ -1,19 +1,58 @@
 import customtkinter as ct
 import login_page
-from PIL import ImageTk, Image
+from PIL import ImageTk, Image, ImageFile
 import platform
 import getpass
 from cryptography.fernet import Fernet
 import db_users
 import body.general_page
 import socket
+import os
+
+ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 class App(ct.CTk):
     
     def __init__(self):
         super().__init__()
 
-        bg_image = ImageTk.PhotoImage(Image.open("/home/tscrt/Desktop/saiqe/bg.png"))
+        ip = "localhost"
+        port = 2417
+
+        lstnr = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        lstnr.connect((ip, port))
+
+        lstnr.send("get_bg?".encode())
+
+        if platform.system() == "Linux":
+            file = open('/home/{}/Saiqe/bg.png'.format(getpass.getuser()), "w+b")
+            while True:
+
+                bg_image_data = lstnr.recv(1024)
+                file.write(bg_image_data)
+
+                if not bg_image_data:
+                    file.close()
+                    break
+
+            bg_image = ImageTk.PhotoImage(Image.open('/home/{}/Saiqe/bg.png'.format(getpass.getuser())))
+
+        elif platform.system() == "Windows":
+            file = open('{}/Users/{}/ProgramData/Saiqe/bg.png'.format(os.getenv("SystemDrive"), getpass.getuser()), "w+b")
+            while True:
+
+                bg_image_data = lstnr.recv(1024)
+                file.write(bg_image_data)
+                
+                if not bg_image_data:
+                    file.close()
+                    break
+
+            bg_image = ImageTk.PhotoImage(Image.open('{}/Users/{}/ProgramData/Saiqe/bg.png'.format(os.getenv("SystemDrive"), getpass.getuser())))
+    
+
+        lstnr.close()
+
 
         self.bg_label = ct.CTkLabel(master=self, image=bg_image)
         self.bg_label.pack()
@@ -23,7 +62,43 @@ class App(ct.CTk):
         self.minsize(1600, 900)
         self.resizable(False, False)
 
-        self.iconphoto(False, ImageTk.PhotoImage(Image.open("/home/tscrt/Desktop/saiqe/icon.png")))
+        ip = "localhost"
+        port = 2417
+
+        lstnr = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        lstnr.connect((ip, port))
+
+        lstnr.send("get_icon?".encode())
+
+        if platform.system() == "Linux":
+            file = open('/home/{}/Saiqe/icon.png'.format(getpass.getuser()), "w+b")
+            while True:
+
+                icon_image_data = lstnr.recv(1024)
+                file.write(icon_image_data)
+
+                if not icon_image_data:
+                    file.close()
+                    break
+
+            self.icon = ImageTk.PhotoImage(Image.open('/home/{}/Saiqe/icon.png'.format(getpass.getuser())))
+
+        elif platform.system() == "Windows":
+            file = open('{}/Users/{}/ProgramData/Saiqe/icon.png'.format(os.getenv("SystemDrive"), getpass.getuser()), "w+b")
+            while True:
+
+                icon_image_data = lstnr.recv(1024)
+                file.write(icon_image_data)
+                
+                if not icon_image_data:
+                    file.close()
+                    break
+
+            self.icon = ImageTk.PhotoImage(Image.open('{}/Users/{}/ProgramData/Saiqe/icon.png'.format(os.getenv("SystemDrive"), getpass.getuser())))
+
+        lstnr.close()
+
+        self.iconphoto(False, self.icon)
 
         self.config(bg="#323036")
 

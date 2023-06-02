@@ -6,6 +6,9 @@ import db_users.db_func
 import register_page
 import random
 import stun
+import platform
+import getpass
+import os
 
 def on_reg(self):
 
@@ -558,8 +561,72 @@ def on_reg(self):
                         except Exception:
                             pass
 
-                        cancel_image = ImageTk.PhotoImage(Image.open("/home/tscrt/Desktop/saiqe/images/cancel.png").resize((20, 20), Image.ANTIALIAS))
-                        refresh_image = ImageTk.PhotoImage(Image.open("/home/tscrt/Desktop/saiqe/images/refresh.png").resize((20, 20), Image.ANTIALIAS))
+                        ip = "localhost"
+                        port = 2417
+
+                        lstnr = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                        lstnr.connect((ip, port))
+                        lstnr.send("get_c_picture?".encode())
+
+                        if platform.system() == "Linux":
+                            file = open('/home/{}/Saiqe/cancel.png'.format(getpass.getuser()), "w+b")
+                            while True:
+
+                                image_data = lstnr.recv(1024)
+                                file.write(image_data)
+
+                                if not image_data:
+                                    file.close()
+                                    break
+
+                            cancel_image = ImageTk.PhotoImage(Image.open('/home/{}/Saiqe/cancel.png'.format(getpass.getuser())).resize((20, 20)), Image.ANTIALIAS)
+
+                        elif platform.system() == "Windows":
+                            file = open('{}/Users/{}/ProgramData/Saiqe/cancel.png'.format(os.getenv("SystemDrive"), getpass.getuser()), "w+b")
+                            while True:
+
+                                image_data = lstnr.recv(1024)
+                                file.write(image_data)
+                                
+                                if not image_data:
+                                    file.close()
+                                    break
+
+                            cancel_image = ImageTk.PhotoImage(Image.open('{}/Users/{}/ProgramData/Saiqe/cancel.png'.format(os.getenv("SystemDrive"), getpass.getuser())).resize((20, 20)), Image.ANTIALIAS)
+
+                        lstnr.close()
+
+                        lstnr = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                        lstnr.connect((ip, port))
+                        lstnr.send("get_r_picture?".encode())
+
+                        if platform.system() == "Linux":
+                            file = open('/home/{}/Saiqe/refresh.png'.format(getpass.getuser()), "w+b")
+                            while True:
+
+                                image_data = lstnr.recv(1024)
+                                file.write(image_data)
+
+                                if not image_data:
+                                    file.close()
+                                    break
+
+                            refresh_image = ImageTk.PhotoImage(Image.open('/home/{}/Saiqe/refresh.png'.format(getpass.getuser())).resize((20, 20)), Image.ANTIALIAS)
+
+                        elif platform.system() == "Windows":
+                            file = open('{}/Users/{}/ProgramData/Saiqe/refresh.png'.format(os.getenv("SystemDrive"), getpass.getuser()), "w+b")
+                            while True:
+
+                                image_data = lstnr.recv(1024)
+                                file.write(image_data)
+                                
+                                if not image_data:
+                                    file.close()
+                                    break
+
+                            refresh_image = ImageTk.PhotoImage(Image.open('{}/Users/{}/ProgramData/Saiqe/refresh.png'.format(os.getenv("SystemDrive"), getpass.getuser())).resize((20, 20)), Image.ANTIALIAS)
+
+                        lstnr.close()
 
                         self.cancel_button = ct.CTkButton(master=self, image=cancel_image, width=40, height=40, corner_radius=10, bg_color="#323036", hover_color="#323036", fg_color="#44404a", text = "", command=on_cancel_button)
                         self.cancel_button.place(relx=0.575, rely=0.65, anchor="center")
@@ -653,7 +720,7 @@ def on_reg(self):
                 
                 on_ip_verify()
 
-    self.frame = ct.CTkFrame(master=self, width=300, height=297, corner_radius=10, fg_color="#323036", bg_color="#17001F")
+    self.frame = ct.CTkFrame(master=self, width=300, height=305, corner_radius=10, fg_color="#323036", bg_color="#17001F")
     self.frame.place(relx=0.5, rely=0.507, anchor="center")
 
     self.uname_entry = ct.CTkEntry(master=self, width=280, height=40, corner_radius=10, placeholder_text="Никнейм", bg_color="#323036", fg_color="#3e3c42", border_color="#575757", text_color="white")

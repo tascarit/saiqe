@@ -1,6 +1,7 @@
 import pymongo
 from pymongo.mongo_client import MongoClient
 import json
+import os
 
 uri = "mongodb+srv://solomon_conn:z7aMb7aSr050eofZ@saiqe.kbpagkn.mongodb.net/?retryWrites=true&w=majority"
 
@@ -77,3 +78,23 @@ def on_avatar_find(name):
             avatar_id = "default"
 
         return avatar_id
+    
+def on_avatar_add(avatar_id, name):
+    for x in users_coll.find({"name": str(name)}):
+
+        if x['avatar_id'] == "default":
+            previous = {"name": str(name)}
+            new = {"$set": {"avatar_id": str(avatar_id)}}
+
+            users_coll.update_one(previous, new)
+        else:
+
+            previous_id = x['avatar_id']
+
+            previous = {"name": str(name)}
+            new = {"$set": {"avatar_id": str(avatar_id)}}
+
+            users_coll.update_one(previous, new)
+
+            os.remove('/home/tscrt/Desktop/saiqe/db_users/pfps/{}.png'.format(previous_id))
+
