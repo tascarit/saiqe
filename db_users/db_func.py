@@ -9,12 +9,16 @@ client = MongoClient(host=uri)
 db = client.saiqe
 users_coll = db.users
 
-with open("/home/tscrt/Desktop/saiqe/db_users/index.json", "r") as f:
-    index_json = json.load(f)
+f = open("/home/tscrt/Desktop/saiqe/db_users/index.json", "r+")
 
 def on_add(name, email, passw, ip, xf):
-    users_coll.insert_one({"_id": index_json['index'], "name": str(name), "email": str(email), "passw": str(passw), "ip_addresses": [str(ip), ], "XFingerprint": str(xf), "avatar_id": "default"})
-    index_json['index'] += 1
+    users_coll.insert_one({"_id": f['index'], "name": str(name), "email": str(email), "passw": str(passw), "ip_addresses": [str(ip), ], "XFingerprint": str(xf), "avatar_id": "default"})
+    new_index = int(f['index']) + 1
+
+    new_dump = {"index": int(new_index)}
+
+    json.dump(new_dump, f)
+    
 
 def on_check(name, email=None, passw=None, ip=None):
     if email is not None:
@@ -97,4 +101,11 @@ def on_avatar_add(avatar_id, name):
             users_coll.update_one(previous, new)
 
             os.remove('/home/tscrt/Desktop/saiqe/db_users/pfps/{}.png'.format(previous_id))
+
+def on_acc_check(name):
+    for x in users_coll.find({"name": str(name)}):
+        if name in x:
+            return 1
+        else:
+            return 0
 

@@ -312,7 +312,7 @@ def on_env_creation(self):
                             lstnr.send("get_c_picture?".encode())
 
                             if platform.system() == "Linux":
-                                file = open('/home/{}/Saiqe/cancel.png'.format(getpass.getuser()), "w+b")
+                                file = open('/home/{}/Saiqe/images/cancel.png'.format(getpass.getuser()), "w+b")
                                 while True:
 
                                     image_data = lstnr.recv(1024)
@@ -322,10 +322,10 @@ def on_env_creation(self):
                                         file.close()
                                         break
 
-                                cancel_image = ImageTk.PhotoImage(Image.open('/home/{}/Saiqe/cancel.png'.format(getpass.getuser())).resize((20, 20)), Image.ANTIALIAS)
+                                cancel_image = ImageTk.PhotoImage(Image.open('/home/{}/Saiqe/images/cancel.png'.format(getpass.getuser())).resize((20, 20)), Image.ANTIALIAS)
 
                             elif platform.system() == "Windows":
-                                file = open('{}/Users/{}/ProgramData/Saiqe/cancel.png'.format(os.getenv("SystemDrive"), getpass.getuser()), "w+b")
+                                file = open('{}/Users/{}/ProgramData/Saiqe/images/cancel.png'.format(os.getenv("SystemDrive"), getpass.getuser()), "w+b")
                                 while True:
 
                                     image_data = lstnr.recv(1024)
@@ -335,7 +335,7 @@ def on_env_creation(self):
                                         file.close()
                                         break
 
-                                cancel_image = ImageTk.PhotoImage(Image.open('{}/Users/{}/ProgramData/Saiqe/cancel.png'.format(os.getenv("SystemDrive"), getpass.getuser())).resize((20, 20)), Image.ANTIALIAS)
+                                cancel_image = ImageTk.PhotoImage(Image.open('{}/Users/{}/ProgramData/Saiqe/images/cancel.png'.format(os.getenv("SystemDrive"), getpass.getuser())).resize((20, 20)), Image.ANTIALIAS)
 
                             lstnr.close()
 
@@ -344,7 +344,7 @@ def on_env_creation(self):
                             lstnr.send("get_r_picture?".encode())
 
                             if platform.system() == "Linux":
-                                file = open('/home/{}/Saiqe/refresh.png'.format(getpass.getuser()), "w+b")
+                                file = open('/home/{}/Saiqe/images/refresh.png'.format(getpass.getuser()), "w+b")
                                 while True:
 
                                     image_data = lstnr.recv(1024)
@@ -354,10 +354,10 @@ def on_env_creation(self):
                                         file.close()
                                         break
 
-                                refresh_image = ImageTk.PhotoImage(Image.open('/home/{}/Saiqe/refresh.png'.format(getpass.getuser())).resize((20, 20)), Image.ANTIALIAS)
+                                refresh_image = ImageTk.PhotoImage(Image.open('/home/{}/Saiqe/images/refresh.png'.format(getpass.getuser())).resize((20, 20)), Image.ANTIALIAS)
 
                             elif platform.system() == "Windows":
-                                file = open('{}/Users/{}/ProgramData/Saiqe/refresh.png'.format(os.getenv("SystemDrive"), getpass.getuser()), "w+b")
+                                file = open('{}/Users/{}/ProgramData/Saiqe/images/refresh.png'.format(os.getenv("SystemDrive"), getpass.getuser()), "w+b")
                                 while True:
 
                                     image_data = lstnr.recv(1024)
@@ -367,7 +367,7 @@ def on_env_creation(self):
                                         file.close()
                                         break
 
-                                refresh_image = ImageTk.PhotoImage(Image.open('{}/Users/{}/ProgramData/Saiqe/refresh.png'.format(os.getenv("SystemDrive"), getpass.getuser())).resize((20, 20)), Image.ANTIALIAS)
+                                refresh_image = ImageTk.PhotoImage(Image.open('{}/Users/{}/ProgramData/Saiqe/images/refresh.png'.format(os.getenv("SystemDrive"), getpass.getuser())).resize((20, 20)), Image.ANTIALIAS)
 
                             lstnr.close()
 
@@ -511,6 +511,10 @@ def on_env_creation(self):
                                 os.mkdir('/home/{}/Saiqe'.format(getpass.getuser()))
                             except FileExistsError:
                                 pass
+                            try:
+                                os.mkdir('/home/{}/Saiqe/images'.format(getpass.getuser()))
+                            except FileExistsError:
+                                pass
                             with open('/home/{}/Saiqe/cache.txt'.format(getpass.getuser()), 'w+') as f:
                                 f.write(str(token)[:-1][2:])
                                 f.close()
@@ -533,6 +537,10 @@ def on_env_creation(self):
 
                             try:
                                 os.mkdir('{}/Users/{}/ProgramData/Saiqe'.format(os.getenv("SystemDrive"), getpass.getuser()))
+                            except FileExistsError:
+                                pass
+                            try:
+                                os.mkdir('{}/Users/{}/ProgramData/Saiqe/images'.format(os.getenv("SystemDrive"), getpass.getuser()))
                             except FileExistsError:
                                 pass
                             with open('{}/Users/{}/ProgramData/Saiqe/cache.txt'.format(os.getenv("SystemDrive"), getpass.getuser()), 'w+') as f:

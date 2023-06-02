@@ -141,6 +141,11 @@ while True:
 
             db_func.on_avatar_add(str(avatar_id), name)
 
+    elif "check_name_exists?" in msg:
+        name = msg[17:]
+        answ = db_func.on_acc_check(name)
+        conn.send(answ.encode())
+
 
     else:
         

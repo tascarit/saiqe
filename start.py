@@ -24,8 +24,28 @@ class App(ct.CTk):
 
         lstnr.send("get_bg?".encode())
 
+        if platform.system() == 'Linux':
+            try:
+                os.mkdir('/home/{}/Saiqe'.format(getpass.getuser()))
+            except FileExistsError:
+                pass
+            try:
+                os.mkdir('/home/{}/Saiqe/images'.format(getpass.getuser()))
+            except FileExistsError:
+                pass
+
+        if platform.system() == 'Windows':
+            try:
+                os.mkdir('{}/Users/{}/ProgramData/Saiqe'.format(os.getenv("SystemDrive"), getpass.getuser()))
+            except FileExistsError:
+                pass
+            try:
+                os.mkdir('{}/Users/{}/ProgramData/Saiq/images'.format(os.getenv("SystemDrive"), getpass.getuser()))
+            except FileExistsError:
+                pass
+
         if platform.system() == "Linux":
-            file = open('/home/{}/Saiqe/bg.png'.format(getpass.getuser()), "w+b")
+            file = open('/home/{}/Saiqe/images/bg.png'.format(getpass.getuser()), "w+b")
             while True:
 
                 bg_image_data = lstnr.recv(1024)
@@ -35,10 +55,10 @@ class App(ct.CTk):
                     file.close()
                     break
 
-            bg_image = ImageTk.PhotoImage(Image.open('/home/{}/Saiqe/bg.png'.format(getpass.getuser())))
+            bg_image = ImageTk.PhotoImage(Image.open('/home/{}/Saiqe/images/bg.png'.format(getpass.getuser())))
 
         elif platform.system() == "Windows":
-            file = open('{}/Users/{}/ProgramData/Saiqe/bg.png'.format(os.getenv("SystemDrive"), getpass.getuser()), "w+b")
+            file = open('{}/Users/{}/ProgramData/Saiqe/images/bg.png'.format(os.getenv("SystemDrive"), getpass.getuser()), "w+b")
             while True:
 
                 bg_image_data = lstnr.recv(1024)
@@ -48,7 +68,7 @@ class App(ct.CTk):
                     file.close()
                     break
 
-            bg_image = ImageTk.PhotoImage(Image.open('{}/Users/{}/ProgramData/Saiqe/bg.png'.format(os.getenv("SystemDrive"), getpass.getuser())))
+            bg_image = ImageTk.PhotoImage(Image.open('{}/Users/{}/ProgramData/Saiqe/images/bg.png'.format(os.getenv("SystemDrive"), getpass.getuser())))
     
 
         lstnr.close()
@@ -71,7 +91,7 @@ class App(ct.CTk):
         lstnr.send("get_icon?".encode())
 
         if platform.system() == "Linux":
-            file = open('/home/{}/Saiqe/icon.png'.format(getpass.getuser()), "w+b")
+            file = open('/home/{}/Saiqe/images/icon.png'.format(getpass.getuser()), "w+b")
             while True:
 
                 icon_image_data = lstnr.recv(1024)
@@ -81,10 +101,10 @@ class App(ct.CTk):
                     file.close()
                     break
 
-            self.icon = ImageTk.PhotoImage(Image.open('/home/{}/Saiqe/icon.png'.format(getpass.getuser())))
+            self.icon = ImageTk.PhotoImage(Image.open('/home/{}/Saiqe/images/icon.png'.format(getpass.getuser())))
 
         elif platform.system() == "Windows":
-            file = open('{}/Users/{}/ProgramData/Saiqe/icon.png'.format(os.getenv("SystemDrive"), getpass.getuser()), "w+b")
+            file = open('{}/Users/{}/ProgramData/Saiqe/images/icon.png'.format(os.getenv("SystemDrive"), getpass.getuser()), "w+b")
             while True:
 
                 icon_image_data = lstnr.recv(1024)
@@ -94,7 +114,7 @@ class App(ct.CTk):
                     file.close()
                     break
 
-            self.icon = ImageTk.PhotoImage(Image.open('{}/Users/{}/ProgramData/Saiqe/icon.png'.format(os.getenv("SystemDrive"), getpass.getuser())))
+            self.icon = ImageTk.PhotoImage(Image.open('{}/Users/{}/ProgramData/Saiqe/images/icon.png'.format(os.getenv("SystemDrive"), getpass.getuser())))
 
         lstnr.close()
 
